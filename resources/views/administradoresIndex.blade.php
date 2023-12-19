@@ -51,13 +51,18 @@
                 <div class="container-fluid">
                     <img src="{{ asset('images/MHNV.png') }}" alt="Descripción de la imagen">
                     <div class="ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                        </form>
+                        @if (Auth::check())
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Desconectar</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </nav>
         </div>
+    </header>
+
     <!-- IMAGEN Y BUSCAR -->
 
     <!-- Barra de navegación -->
@@ -70,9 +75,6 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('mostrarCalendarioDiasHabiles')}}">Planifica tu visita</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login')}}">Login</a>
                     </li>
                 </ul>
             </div>

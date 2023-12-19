@@ -11,6 +11,7 @@ use App\Http\Controllers\FechasActividadController;
 use App\Http\Controllers\BloqueController;
 use App\Http\Controllers\GuiaController;
 use App\Http\Controllers\GrupoController;
+use App\Http\Controllers\UserController;
 
 
 
@@ -25,8 +26,11 @@ use App\Http\Controllers\GrupoController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// En web.php
+Route::post('/actualizar-descripcion', [ActividadController::class, 'actualizarDescripcion'])->name('actualizar_descripcion');
 
-Route::get('/paginaDespuesDeGuardar', [Controller::class, 'paginaDespuesDeGuardar'])->name('paginaDespuesDeGuardar');
+//Route::get('/paginaDespuesDeGuardar', [Controller::class, 'paginaDespuesDeGuardar'])->name('paginaDespuesDeGuardar');
+Route::get('/paginaDespuesDeGuardar', [ActividadController::class, 'paginaDespuesDeGuardar'])->name('paginaDespuesDeGuardar');
 
 Route::get('/mostrarCalendarioDiasHabiles', [ActividadController::class, 'mostrarCalendarioDiasHabiles'])->name('mostrarCalendarioDiasHabiles');
 Route::get('/', [ActividadController::class, 'mostrarCalendarioDiasHabiles']);
@@ -39,7 +43,8 @@ Route::post('/formulario/enviar/{cod_bloque}/{cod_actividad}/{fecha}', [Formular
 
 Route::get('/login', [Controller::class, 'login'])->name('login');
 
-Route::post('/usuarios/login',[Controller::class,'autenticar'])->name('usuarios.autenticar');
+Route::post('/usuarios/autenticar', [UserController::class, 'autenticar'])->name('autenticar');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::get('/administradores', [Controller::class, 'administradoresIndex'])->name('administradoresIndex');
 

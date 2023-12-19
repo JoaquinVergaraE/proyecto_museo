@@ -57,7 +57,7 @@ class AppServiceProvider extends ServiceProvider
     
 
     Validator::replacer('rut_chileno', function ($message, $attribute, $rule, $parameters) {
-        return str_replace(':attribute', $attribute, 'El campo :attribute no es un RUT chileno válido.');
+        return str_replace(':attribute', $attribute, 'El campo no es un RUT chileno valido.');
     });
 }
 }

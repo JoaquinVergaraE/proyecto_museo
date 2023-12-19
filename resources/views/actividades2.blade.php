@@ -99,7 +99,7 @@
                     @foreach($actividades as $actividad)
                     <tr>
                         <td>{{ $actividad->cod_actividad }}</td>
-                        <td>{{ $actividad->descripcion }}</td>
+                        <td class="editable" data-id="{{ $actividad->cod_actividad }}" contenteditable="false">{{ $actividad->descripcion }}</td>
                         <td>
                             <span class="material-icons edit-icon" data-id="{{ $actividad->cod_actividad }}" style="cursor: pointer;">edit</span>
                         </td>
@@ -112,6 +112,37 @@
 </div>
 
 <!-- Asegúrate de tener jQuery incluido antes de este script -->
+
+<script>
+    $(document).ready(function () {
+        $('.edit-icon').on('click', function () {
+            var codActividad = $(this).data('cod_actividad');
+            var nuevaDescripcion = prompt('Ingrese la nueva descripción:');
+
+            if (nuevaDescripcion !== null) {
+                // Envía la solicitud al servidor para actualizar la descripción
+                $.ajax({
+                    url: 'actualizar_descripcion',
+                    method: 'POST',
+                    data: {
+                        cod_actividad: codActividad,
+                        nueva_descripcion: nuevaDescripcion,
+                        _token: '{{ csrf_token() }}' // Asegúrate de incluir el token CSRF
+                    },
+                    success: function (response) {
+                        // Manejar la respuesta del servidor
+                        console.log(response.message);
+                        // Puedes actualizar la descripción en la interfaz de usuario si es necesario
+                    },
+                    error: function (error) {
+                        console.error(error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+
 
 </body>
 

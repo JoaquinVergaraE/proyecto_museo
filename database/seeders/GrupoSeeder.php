@@ -16,10 +16,8 @@ class GrupoSeeder extends Seeder
         Grupo::create([
             'cod_institucion' => 1,
             'rut_encargado' => '19327431-5',
-            'cantidad_niños' => 10,
-            'cantidad_niñas' => 20,
-            'cantidad_adultos' => 0,
-            'cantidad_adultas' => 0
+            'cantidad_ninos_ninas' => 10,
+            'cantidad_adultos_adultas' => 20,
         ]);
     }
 }

@@ -43,14 +43,17 @@
                 <div class="container-fluid">
                     <img src="{{ asset('images/MHNV.png') }}" alt="Descripción de la imagen">
                     <div class="ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                        </form>
+                        @if (Auth::check())
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Desconectar</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </nav>
         </div>
-    <!-- IMAGEN Y BUSCAR -->
+    </header>
 
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -64,7 +67,7 @@
                         <a class="nav-link" href="" onclick="recargarPagina()">Planifica tu visita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login')}}">Login Administradores</a>
+                        <a class="nav-link" href="{{ route('login')}}">Login administrativo</a>
                     </li>
                 </ul>
             </div>
@@ -89,23 +92,86 @@
         });
     </script>
     <!-- POPUP -->
-
-
-<div class="container mt-5 mx-auto text-center">
-    <h1>Calendario de Días Hábiles 2023</h1>
+ <div class="container mb-5 mt-5">
+    <div class="row justify-content-center">
+        <h5> El Museo de Historia Natural de Valparaíso invita al público a visitar sus dependencias, exposiciones y biblioteca, de lunes a viernes. Destacando el desarrollo de recorridos guiados para delegaciones de cualquier tipo (previa reserva) y recorridos libres y gratuitos para público general.
+        </h5>
+        <div class="mt-3 mb-3" style="border-bottom: 3px solid #000000">
+        </div>
+        <img src="{{ asset('images/planifica.jpg') }}" alt="Descripción de la imagen" class="img-fluid">
+    </div>
 </div>
-    <div class="container mb-5">
-        <div class="row justify-content-center">
-            <div class="calendario-dias mb-5"> 
-                @foreach ($diasHabiles as $dia)
-                    @if (!$dia['ocultar'])
-                        <a href="{{ route('accion-dia', ['fecha' => $dia['fecha']]) }}" class="nav-link mt-2 mb-2" style="border: 5px solid #ccc; border-radius: 10px; padding: 10px;">{{ $dia['fecha'] }}</a>
-                    @endif
-                @endforeach
-            </div>
+            
+</div>
+    <div class="container">
+        <div class="row justify-content-center text-center mb-5">
+            <h2>HORARIO PÚBLICO GENERAL</h2>
+            <h6 class="mt-3" style= "color: gray;">**En cuatro bloques de horario: 09:00 a 10:00, 10:30 a 11:30, 13:30 a 14:30 y 15:00 a 16:00** </h6>
         </div>
     </div>
+    <div class="container">
+        <div class="row justify-content-center text-center mb-3">
+            <h2>PLANIFICA TU VISITA GRUPAL GUIADA</h2>
+        </div>
+    </div>
+    
+<div class="container">
+    <div class="row justify-content-center text-center">
+        <h6>Disponibilidad diciembre de 2023</h6>
+    </div>
+</div>
 
+<div class="container">
+    <div class="row justify-content-center">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Lunes</th>
+                    <th>Martes</th>
+                    <th>Miércoles</th>
+                    <th>Jueves</th>
+                    <th>Viernes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @php
+                        $contadorDias = 4;
+                    @endphp
+                    @for ($i = 0; $i < 4; $i++)
+                        <td></td>
+                    @endfor
+                    @foreach ($diasHabiles as $dia)
+                        @if ($contadorDias % 5 == 0)
+                            </tr><tr>
+                        @endif
+                        <td>
+                            @if (!$dia['ocultar'])
+                                <a href="{{ route('accion-dia', ['fecha' => $dia['fecha']]) }}" class="nav-link mt-2 mb-2 text-center" style="border: 1px solid #4CAF50; border-radius: 10px; padding: 10px; display: block; color: white; background-color: #4CAF50;">{{ $dia['numeroDia'] }}</a>
+                            @else
+                                <div class="alert alert-danger mt-2 mb-2 text-center" style="border: 1px solid #d32f2f; border-radius: 10px; padding: 10px; display: block; background-color: #d32f2f; color: white;">{{ $dia['numeroDia'] }}
+                                </div>                            
+                            @endif
+                        </td>
+                        @php
+                            $contadorDias++;
+                        @endphp
+                    @endforeach
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="container mx-auto text-center mt-2 mb-5">
+        <h6>**Reserva válida solo para grupos de 10 o más personas**</h6>
+    
+</div>
 
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -139,7 +205,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>¡Hola! Gracias por visitar la seccion "Planifica tu visita". A continuacion, selecciona el dia que desees y sigue las instrucciones.</p>
+        <p>¡Hola! Gracias por visitar la seccion "Planifica tu visita". ¡Recuerda que los recorridos son libres y gratuitos para publico general!. Si deseas reservar una visita guiada para un grupo de personas, por favor, sigue las instrucciones.</p>
         <!-- Puedes personalizar el contenido del modal según tus necesidades -->
       </div>
       <div class="modal-footer">
@@ -155,4 +221,5 @@
       location.reload();
     }
 </script>
+
 

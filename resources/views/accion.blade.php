@@ -10,19 +10,33 @@
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>        
         <title>MUSEO DE HISTORIA NATURAL DE VALPARAISO</title>
-</head>
+            <style>
+        body {
+            background-image: url('{{ asset('images/fondo.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            margin: 0; /* Asegura que no haya márgenes alrededor del cuerpo */
+            padding: 0; /* Asegura que no haya relleno alrededor del cuerpo */
+        }
+    </style>
+    </head>
+    <header class="align-items-center bg-white">
         <div class="bg-primary" data-bs-theme="white">
             <nav class="navbar bg-body-tertiary">
                 <div class="container-fluid">
                     <img src="{{ asset('images/MHNV.png') }}" alt="Descripción de la imagen">
                     <div class="ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                        </form>
+                        @if (Auth::check())
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Desconectar</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </nav>
         </div>
+    </header>
     <!-- IMAGEN Y BUSCAR -->
 
     <!-- Barra de navegación -->
@@ -37,7 +51,7 @@
                         <a class="nav-link" href="{{ route('mostrarCalendarioDiasHabiles') }}" onclick="volverPaginaAnterior()">Planifica tu visita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Login</a>
+                        <a class="nav-link" href="">Login Administrativo</a>
                     </li>
                 </ul>
             </div>
@@ -46,48 +60,47 @@
     <!-- Barra de navegación -->
     </header>
 <body>
-    <div class="container mt-5 mx-auto text-center">
-    <h1>Actividades disponibles del día {{$fecha}}</h1>
-    </div>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header"></div>
-                <div class="card-body">
-                    @foreach ($fecha_cod as $index => $cod_actividad)
-                        @if (isset($descripcion[$index]))
-                            @php
-                            $actividadActual = $actividadesFiltradas->where('cod_actividad', $cod_actividad)->first();
-                            @endphp
-                            @if($actividadActual)
-                                <div class="mx auto text-center">
-                                    <h4>Actividad: {{ $fecha_cod[$index] }}</h4>
+<div class="container mt-5 text-center" style="background-color: rgba(0, 0, 0, 0.5); padding: 20px;">
+    <h3 style="color: white;">Actividades disponibles {{$fechaFormateada}}</h3>
+    <h6 style="color: white;">(Debido a la falta de personal y a las limitaciones del museo, solo se puede realizar una actividad al día por reserva)</h6>
+</div>
+
+<div class="container mb-5">
+    <div class="row">
+        @foreach ($fecha_cod as $index => $cod_actividad)
+            <div class="col-md-6">
+                @php
+                    $actividadActual = $actividades->where('cod_actividad', $cod_actividad)->first();
+                    $puedeMostrar = !in_array($actividadActual->cod_actividad, $actividadesAsociadas);
+                @endphp
+                @if ($puedeMostrar)
+                <div class="card mt-3 mb-5" style="background-color: rgba(0, 0, 0, 0.5);">
+                    @if (isset($descripcion[$index]))
+                            <div class="card-body">
+                                <div class="mx-auto text-justify mb-3" >
+                                    <h4 style="color: white; text-decoration: underline;">{{ $titulo[$index] }}</h4>
                                 </div>
-                                <div class="mb-3 d-flex justify-content-between align-items-center">
-                                    <p>Descripción: {{ $descripcion[$index] }}</p>
+                                <div class="mb-3 d-flex justify-content-between align-items-center" >
+                                    <p style="color: white;">Descripción de la actividad: {{ $descripcion[$index] }}</p>
                                 </div>
-                                <div class="mx auto text-center">
-                                    <p>Horarios Disponibles</p>
+                                <div class="mx-auto text-center">
+                                    <p style="color: white;">Horarios Disponibles</p>
                                 </div>
                                 <div class="mb-3 pb-3 d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('reserva', ['cod_bloque' => 1,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center">{{$bloques->get($index)->hora_bloque}}</a>
-                                    <a href="{{ route('reserva', ['cod_bloque' => 2,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center">10:30-11:30</a>
-                                    <a href="{{ route('reserva', ['cod_bloque' => 3,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center">13:30-14:30</a>
-                                    <a href="{{ route('reserva', ['cod_bloque' => 4,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center">15:00-16:00</a>
+                                    <a href="{{ route('reserva', ['cod_bloque' => 1,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center @if ($horaBloqueRojo == 1 && $cod_actividad_rojo == $fecha_cod[$index] && $ultimaFecha == $fecha) btn-danger" style="pointer-events: none; @endif">09:00-10:00</a>
+                                    <a href="{{ route('reserva', ['cod_bloque' => 2,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center @if ($horaBloqueRojo == 2 && $cod_actividad_rojo == $fecha_cod[$index] && $ultimaFecha == $fecha) btn-danger" style="pointer-events: none; @endif">10:30-11:30</a>
+                                    <a href="{{ route('reserva', ['cod_bloque' => 3,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center @if ($horaBloqueRojo == 3 && $cod_actividad_rojo == $fecha_cod[$index] && $ultimaFecha == $fecha) btn-danger" style="pointer-events: none; @endif">13:30-14:30</a>
+                                    <a href="{{ route('reserva', ['cod_bloque' => 4,'cod_actividad' => $fecha_cod[$index], 'fecha' => $fecha]) }}" class="btn btn-primary align-items-center @if ($horaBloqueRojo == 4 && $cod_actividad_rojo == $fecha_cod[$index] && $ultimaFecha == $fecha) btn-danger" style="pointer-events: none; @endif">15:00-16:00</a>
                                 </div>
-
-                                <div class="mb-3" style="border-bottom: 5px solid #000000">
-                                </div>
-                            @endif
-                        @endif
-                    @endforeach
+                            </div>
+                    @endif
                 </div>
-                <div class="card-footer"></div>
+                @endif
             </div>
-        </div>
+        @endforeach
     </div>
 </div>
+
 
 
 

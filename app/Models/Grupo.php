@@ -15,10 +15,8 @@ class Grupo extends Model
         'cod_grupo',
         'cod_institucion',
         'rut_encargado',
-        'cantidad_niños',
-        'cantidad_niñas',
-        'cantidad_adultos',
-        'cantidad_adultas',
+        'cantidad_ninos_ninas',
+        'cantidad_adultos_adultas',
     ];
 
     public function institucion()

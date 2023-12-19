@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('actividades', function (Blueprint $table) {
             $table->increments('cod_actividad'); 
             $table->string('descripcion');
+            $table->string('titulo');
         });
     }
 

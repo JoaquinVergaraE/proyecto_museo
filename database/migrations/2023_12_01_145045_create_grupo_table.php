@@ -15,10 +15,8 @@ return new class extends Migration
             $table->increments('cod_grupo'); 
             $table->unsignedInteger('cod_institucion'); 
             $table->string('rut_encargado'); 
-            $table->integer('cantidad_niños');
-            $table->integer('cantidad_niñas');
-            $table->integer('cantidad_adultos');
-            $table->integer('cantidad_adultas');
+            $table->integer('cantidad_ninos_ninas');
+            $table->integer('cantidad_adultos_adultas');
     
             $table->foreign('cod_institucion')->references('cod_institucion')->on('instituciones')->onDelete('restrict');
             $table->foreign('rut_encargado')->references('rut_encargado')->on('encargados')->onDelete('restrict');

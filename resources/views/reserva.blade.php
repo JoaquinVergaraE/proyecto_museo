@@ -11,18 +11,23 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>        
         <title>MUSEO DE HISTORIA NATURAL DE VALPARAISO</title>
 </head>
+    <header class="align-items-center bg-white">
         <div class="bg-primary" data-bs-theme="white">
             <nav class="navbar bg-body-tertiary">
                 <div class="container-fluid">
                     <img src="{{ asset('images/MHNV.png') }}" alt="Descripción de la imagen">
                     <div class="ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                        </form>
+                        @if (Auth::check())
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-danger">Desconectar</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </nav>
         </div>
+    </header>
     <!-- IMAGEN Y BUSCAR -->
 
     <!-- Barra de navegación -->
@@ -37,7 +42,7 @@
                         <a class="nav-link" href="{{ route('mostrarCalendarioDiasHabiles') }}" onclick="volverPaginaAnterior()">Planifica tu visita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Login</a>
+                        <a class="nav-link" href="">Login Administrativo</a>
                     </li>
                 </ul>
             </div>
@@ -46,135 +51,135 @@
     <!-- Barra de navegación -->
     </header>
     <body>
-    <div class="container mt-5 mb-5 mx-auto text-center">
-    <h2>Formulario de Registro para Grupos</h2>
-    </div>
-    <div class="container mb-">
+<div class="container mt-5 mb-5 mx-auto text-center" style="margin: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 10px;">
+    <h2>Formulario de registro para grupos</h2>
+    <h6 class="" style="color: #FF6666;">*obligatorio</h6>
+</div>
+
+    <div class="container mt-5 mb-5 mx-auto text-left" style="margin: 20px; padding: 20px; border: 1px solid #ccc; border-radius: 10px;">
         <div class="row justify-content-center">
             <div class="col-md-8">
             <form id="formulario" action="{{ url('/formulario/enviar/' . $cod_bloque . '/' . $cod_actividad . '/' . $fecha) }}" method="post">
                 @csrf
-                <!-- Datos del Encargado del Grupo -->
                 <input type="hidden" name="cod_bloque" value="{{ $cod_bloque }}">
                 <input type="hidden" name="cod_actividad" value="{{ $cod_actividad }}">
                 <input type="hidden" name="fecha" value="{{ $fecha }}">
-
-<!-- Resto de tu formulario aquí -->
-
                 <div class="form-group">
-                    <label for="rut_encargado">Rut del Encargado del Grupo: (SIN PUNTOS Y CON GUION)
+                    <label for="rut_encargado">Rut del encargado del grupo: (SIN PUNTOS Y CON GUION)
                         @if ($errors->has('rut_encargado'))
                             <span class="text-danger">{{ $errors->first('rut_encargado') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                    </label>
                     <input type="text" class="form-control" id="rut_encargado" name="rut_encargado" value="{{ old('rut_encargado') }}" required string>
-
                 </div>
 
                 <div class="form-group">
-                    <label for="nom_encargado">Nombre del Encargado del Grupo:
+                    <label for="nom_encargado">Nombre del encargado del grupo:
                     @if ($errors->has('nom_encargado'))
                             <span class="text-danger">{{ $errors->first('nom_encargado') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
                     <input type="text" class="form-control" id="nom_encargado" name="nom_encargado" value="{{ old('nom_encargado') }}" required alpha string>
                 </div>
                 <div class="form-group">
-                    <label for="telefono_encargado">Telefono del Encargado del Grupo: (ejemplo: 912345678)
+                    <label for="telefono_encargado">Teléfono del encargado del grupo: (ejemplo: 912345678)
                     @if ($errors->has('telefono_encargado'))
-                            <span class="text-danger">{{ $errors->first('telefono_encargado') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="telefono_encargado" name="telefono_encargado" value="{{ old('telefono_encargado') }}" required|numeric>
-                    
+                        <span class="text-danger">{{ $errors->first('telefono_encargado') }}</span>
+                    @endif
+                    </label>
+                    <input type="text" class="form-control" id="telefono_encargado" name="telefono_encargado" value="{{ old('telefono_encargado') }}" required|numeric>        
                 </div>
                 <div class="form-group">
-                    <label for="correo_encargado">Correo del Encargado del Grupo: (ejemplo: correo@ejemplo.com)
+                    <label for="correo_encargado">Correo del encargado del grupo: (ejemplo: correo@ejemplo.com)
                     @if ($errors->has('correo_encargado'))
                             <span class="text-danger">{{ $errors->first('correo_encargado') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
                     <input type="text" class="form-control" id="correo_encargado" name="correo_encargado" value="{{ old('correo_encargado') }}" required email>
                     
                 </div>
                 <div class="form-group">
-                    <label for="nom_institucion">Nombre de la institucion del grupo:
+                    <label for="nom_institucion">Nombre de la institución del grupo:
                     @if ($errors->has('nom_institucion'))
                             <span class="text-danger">{{ $errors->first('nom_institucion') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
                     <input type="text" class="form-control" id="nom_institucion" name="nom_institucion" value="{{ old('nom_institucion') }}" required alpha string>
                     
                 </div>
                 <div class="form-group">
-                    <label for="direccion_institucion">Direccion de la institucion del grupo:
+                    <label for="direccion_institucion">Dirección de la institución del grupo:
                     @if ($errors->has('direccion_institucion'))
                             <span class="text-danger">{{ $errors->first('direccion_institucion') }}</span>
-                        @endif</label>
+                    @endif
+                    <span style="color: red;">*</span>
+                    </label>
                     <input type="text" class="form-control" id="direccion_institucion" name="direccion_institucion" value="{{ old('direccion_institucion') }}" required string>
                      
                 </div>
                 <div class="form-group">
-                    <label for="comuna_institucion">Comuna de la institucion del grupo:
+                    <label for="comuna_institucion">Comuna de la institución del grupo:
                     @if ($errors->has('comuna_institucion'))
                             <span class="text-danger">{{ $errors->first('comuna_institucion') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
                     <input type="text" class="form-control" id="comuna_institucion" name="comuna_institucion" value="{{ old('comuna_institucion') }}" required alpha string>
                     
                 </div>
                 <div class="form-group">
-                    <label for="region_institucion">Region de la institucion del grupo:
+                    <label for="region_institucion">Región de la institución del grupo:
                      @if ($errors->has('region_institucion'))
                             <span class="text-danger">{{ $errors->first('region_institucion') }}</span>
-                        @endif</label>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
                     <input type="text" class="form-control" id="region_institucion" name="region_institucion" value="{{ old('region_institucion') }}" required alpha string>
                    
                 </div>
                 <div class="form-group">
-                    <label for="telefono_institucion">Telefono de la institucion:(ejemplo: 332123456)
+                    <label for="telefono_institucion">Teléfono de la institución: (ejemplo: 332123456)
                     @if ($errors->has('telefono_institucion'))
                             <span class="text-danger">{{ $errors->first('telefono_institucion') }}</span>
                         @endif</label>
-                    <input type="text" class="form-control" id="telefono_institucion" name="telefono_institucion"  value="{{ old('telefono_institucion') }}" required numeric>
+                    <input type="text" class="form-control" id="telefono_institucion" name="telefono_institucion"  value="{{ old('telefono_institucion') }}" numeric>
                     
                 </div>
                 <div class="form-group">
-                    <label for="correo_institucion">Correo de la institicion: (ejemplo: correo@ejemplo.com)
+                    <label for="correo_institucion">Correo de la institución: (ejemplo: correo@ejemplo.com)
                     @if ($errors->has('correo_institucion'))
                             <span class="text-danger">{{ $errors->first('correo_institucion') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="correo_institucion" name="correo_institucion" value="{{ old('correo_institucion') }}" required email>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label> 
+                    <input type="text" class="form-control" id="correo_institucion" name="correo_institucion" value="{{ old('correo_institucion') }}" email>
                     
                 </div>
                 <div class="form-group">
-                    <label for="cantidad_niños">Cantidad de niños del grupo:
-                    @if ($errors->has('cantidad_niños'))
-                            <span class="text-danger">{{ $errors->first('cantidad_niños') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="cantidad_niños" name="cantidad_niños" value="{{ old('cantidad_niños') }}"  required integer>
+                    <label for="cantidad_niños">Cantidad de niños y niñas del grupo:
+                    @if ($errors->has('cantidad_ninos_ninas'))
+                            <span class="text-danger">{{ $errors->first('cantidad_ninos_ninas') }}</span>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
+                    <input type="text" class="form-control" id="cantidad_ninos_ninas" name="cantidad_ninos_ninas" value="{{ old('cantidad_ninos_ninas') }}"  required integer>
                      
                 </div>
                 <div class="form-group">
-                    <label for="cantidad_niñas">Cantidad de niñas del grupo:
-                    @if ($errors->has('cantidad_niñas'))
-                            <span class="text-danger">{{ $errors->first('cantidad_niñas') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="cantidad_niñas" name="cantidad_niñas" value="{{ old('cantidad_niñas') }}"  required integer> 
+                    <label for="cantidad_adultos">Cantidad de adultos y adultas del grupo:
+                    @if ($errors->has('cantidad_adultos_adultas'))
+                            <span class="text-danger">{{ $errors->first('cantidad_adultos_adultas') }}</span>
+                        @endif
+                        <span style="color: red;">*</span>
+                        </label>
+                    <input type="text" class="form-control" id="cantidad_adultos_adultas" name="cantidad_adultos_adultas" value="{{ old('cantidad_adultos_adultas') }}"required integer>
                     
                 </div>
-                <div class="form-group">
-                    <label for="cantidad_adultos">Cantidad de adultos del grupo:
-                    @if ($errors->has('cantidad_adultos'))
-                            <span class="text-danger">{{ $errors->first('cantidad_adultos') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="cantidad_adultos" name="cantidad_adultos" value="{{ old('cantidad_adultos') }}"required integer>
-                    
-                </div>
-                <div class="form-group">
-                    <label for="cantidad_adultas">Cantidad de adultas del grupo:
-                    @if ($errors->has('cantidad_adultas'))
-                            <span class="text-danger">{{ $errors->first('cantidad_adultas') }}</span>
-                        @endif</label>
-                    <input type="text" class="form-control" id="cantidad_adultas" name="cantidad_adultas" value="{{ old('cantidad_adultas') }}"  required integer>
-                    
-                </div>
-                
-                <button type="submit" class="btn btn-primary w-100 d-block mb-3">Enviar</button>
+                <button type="submit" class="btn btn-primary w-100 d-block mb-3 mt-3">Enviar</button>
             </form>
         </div>
     </div>

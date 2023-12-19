@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GrupoSeeder::class);
         $this->call(ReservaSeeder::class);
         $this->call(fechasActividadSeeder::class);
+        $this->call(UsersSeeder::class);
     }
 }

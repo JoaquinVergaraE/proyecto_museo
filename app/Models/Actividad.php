@@ -15,6 +15,7 @@ class Actividad extends Model
     protected $fillable = [
         'cod_actividad',
         'descripcion',
+        'titulo',
     ];
 
     public function institucion()

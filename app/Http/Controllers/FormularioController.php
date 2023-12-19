@@ -25,35 +25,33 @@ class FormularioController extends Controller
                 Rule::unique('encargados', 'rut_encargado')->ignore(Encargado::class, 'rut_encargado'),
             ],
             'nom_encargado' => 'required|regex:/^[A-Za-z\s]+$/',
-            'telefono_encargado' => 'required|regex:/^[0-9]{9}$/',
+            'telefono_encargado' => '|regex:/^[0-9]{9}$/',
             'correo_encargado' => 'required|email',
             'nom_institucion' => 'required|regex:/^[A-Za-z\s]+$/',
             'direccion_institucion' => 'required|string',
             'comuna_institucion' => 'required|regex:/^[A-Za-z\s]+$/',
             'region_institucion' => 'required|regex:/^[A-Za-z\s]+$/',
-            'telefono_institucion' => 'required|regex:/^[0-9]{9}$/',
+            'telefono_institucion' => '|regex:/^[0-9]{9}$/',
             'correo_institucion' => 'required|email',
-            'cantidad_niños' => 'required|numeric|min:0|max:30',
-            'cantidad_niñas' => 'required|numeric|min:0|max:30',
-            'cantidad_adultos' => 'required|numeric|min:0|max:30',
-            'cantidad_adultas' => 'required|numeric|min:0|max:30',
+            'cantidad_ninos_ninas' => 'required|numeric|min:0|max:40',
+            'cantidad_adultos_adultas' => 'required|numeric|min:0|max:40',
         ], [
-            'required' => 'El campo :attribute es obligatorio.',
-            'rut_chileno' => 'El campo :attribute no es un RUT chileno valido.',
-            'string' => 'El campo :attribute debe ser una cadena de texto.',
-            'numeric' => 'El campo :attribute debe ser un número.',
-            'min' => 'El campo :attribute debe ser al menos :min.',
-            'max' => 'El campo :attribute no debe ser mayor que :max.',
-            'email' => 'El campo :attribute debe ser una dirección de correo electrónico válida.',
-            'alpha' => 'El campo :attribute debe contener solo letras.',
-            'integer' => 'El campo :attribute debe ser un número entero.',
-            'nom_encargado.regex' => 'El campo :attribute debe contener solo letras y espacios en blanco.',
-            'nom_institucion.regex' => 'El campo :attribute debe contener solo letras y espacios en blanco.',
-            'comuna_institucion.regex' => 'El campo :attribute debe contener solo letras y espacios en blanco.',
-            'region_institucion.regex' => 'El campo :attribute debe contener solo letras y espacios en blanco.',
-            'telefono_encargado.regex' => 'El campo :attribute debe tener exactamente 9 dígitos numéricos.',
-            'telefono_institucion.regex' => 'El campo :attribute debe tener exactamente 9 dígitos numéricos.',
-            'unique' => 'El :attribute ya existe.',
+            'required' => 'El campo es obligatorio.',
+            'rut_chileno' => 'El campo no es un RUT chileno valido.',
+            'string' => 'El campo debe ser solo letras, guiones y números.',
+            'numeric' => 'El campo debe ser solo números.',
+            'min' => 'El campo debe tener al menos :min personas.',
+            'max' => 'El campo no debe ser mayor que :max personas.',
+            'email' => 'El campo debe ser una dirección de correo electrónico válida.',
+            'alpha' => 'El campo debe contener solo letras.',
+            'integer' => 'El campo debe contener solo números.',
+            'nom_encargado.regex' => 'El campo debe contener solo letras y espacios en blanco.',
+            'nom_institucion.regex' => 'El campo debe contener solo letras y espacios en blanco.',
+            'comuna_institucion.regex' => 'El campo debe contener solo letras y espacios en blanco.',
+            'region_institucion.regex' => 'El campo debe contener solo letras y espacios en blanco.',
+            'telefono_encargado.regex' => 'El campo debe tener exactamente 9 dígitos numéricos.',
+            'telefono_institucion.regex' => 'El campo debe tener exactamente 9 dígitos numéricos.',
+            'unique' => 'El dato que ingreso ya existe.',
 
         ]);
 
@@ -84,10 +82,8 @@ class FormularioController extends Controller
     $grupo = new Grupo();
     $grupo->cod_institucion = $ultimoCodInstitucion;
     $grupo->rut_encargado = $request->input('rut_encargado');
-    $grupo->cantidad_niños = $request->input('cantidad_niños');
-    $grupo->cantidad_niñas = $request->input('cantidad_niñas');
-    $grupo->cantidad_adultos = $request->input('cantidad_adultos');
-    $grupo->cantidad_adultas = $request->input('cantidad_adultas');
+    $grupo->cantidad_ninos_ninas = $request->input('cantidad_ninos_ninas');
+    $grupo->cantidad_adultos_adultas = $request->input('cantidad_adultos_adultas');
     $grupo->save();
 
     $ultimoCodGrupo = Grupo::max('cod_grupo');
@@ -108,10 +104,9 @@ class FormularioController extends Controller
     $request->session()->flash('success', 'Información guardada con éxito. Te llegara un correo con la informacion de tu reserva. Muchas gracias.');
 
     //return redirect()->route('mostrarCalendarioDiasHabiles')->with('success', 'Información guardada con éxito. Te llegara un correo con la informacion de tu reserva. Muchas gracias.');
-    return redirect()->route('paginaDespuesDeGuardar')
+    return redirect()->action([ActividadController::class, 'paginaDespuesDeGuardar'])
                      ->header('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0')
                      ->header('Pragma', 'no-cache')
                      ->header('Expires', 'Sat, 26 Jul 1997 05:00:00 GMT'); // Fecha en el pasado para asegurar que no se almacene en caché
     }
 }
-

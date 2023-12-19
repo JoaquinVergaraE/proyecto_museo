@@ -51,9 +51,6 @@
                 <div class="container-fluid">
                     <img src="{{ asset('images/MHNV.png') }}" alt="Descripción de la imagen">
                     <div class="ml-auto">
-                        <form class="form-inline my-2 my-lg-0">
-                            <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Buscar">
-                        </form>
                     </div>
                 </div>
             </nav>
@@ -72,7 +69,7 @@
                         <a class="nav-link" href="{{ route('mostrarCalendarioDiasHabiles')}}">Planifica tu visita</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login')}}">Login Administradores</a>
+                        <a class="nav-link" href="{{ route('login')}}">Login administrativo</a>
                     </li>
                 </ul>
             </div>
@@ -83,36 +80,41 @@
 
     <body>
     <div class="container mt-5 mx-auto text-center">
-        <h1>Login Administradores</h1>
+        <h1>Login administrativo</h1>
     </div>
     
     <div class="container mb-5">
-        <div class="row justify-content-center">
-            <div class="mb-5"> 
-                <form method="POST" action="{{ route('usuarios.autenticar') }}">
-                    @csrf
-                    @if ($errors->has('credenciales'))
-                        <div class="alert alert-danger">
-                            {{ $errors->first('credenciales') }}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5">
+                <div class="card-body">
+                    <form method="POST" action="{{ route('autenticar') }}">
+                        @csrf
+                        @if ($errors->has('credenciales'))
+                            <div class="alert alert-danger">
+                                {{ $errors->first('credenciales') }}
+                            </div>
+                        @endif
+                        <div class="input-group mt-2 bg-light">
+                            <div class="input-group-text bg-info">
+                                <span class="material-icons md-48">&#xe853;</span>
+                            </div>
+                            <input class="form-control" type="text" name="user" placeholder="Usuario">
                         </div>
-                    @endif
-                    <div class="input-group mt-2 bg-light">
-                        <div class="input-group-text bg-info">
-                            <span class="material-icons md-48">&#xe853;</span>
+                        <div class="input-group mt-3 pb-3">
+                            <div class="input-group-text bg-info">
+                                <span class="material-icons md-48">&#xe897;</span>
+                            </div>
+                            <input class="form-control" type="password" name="password" placeholder="Contraseña">
                         </div>
-                        <input class="form-control" type="text" name="user" placeholder="Usuario">
-                    </div>
-                    <div class="input-group mt-3 pb-3">
-                        <div class="input-group-text bg-info">
-                            <span class="material-icons md-48">&#xe897;</span>
-                        </div>
-                        <input class="form-control" type="password" name="password" placeholder="Contraseña">
-                    </div>
-                    <button type="submit" class="btn btn-info fw-bold justify-content-center w-100">Login</button>
-                </form>
+                        <button type="submit" class="btn btn-info fw-bold justify-content-center w-100">Login</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+</div>
+
     </body>
 
 <footer class="bg-dark text-info pt-4 pb-4">
